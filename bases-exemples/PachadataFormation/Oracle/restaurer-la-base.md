@@ -1,0 +1,2 @@
+Cette sauvegarde a été réalisée dans Oracle XE (XEPDB1) avec la commande RMAN.
+Si vous ne connaissez pas RMAN, demandez à quelqu'un de vous aider ! Oracle n'est pas facile à manipuler quand vous êtes débutant.
