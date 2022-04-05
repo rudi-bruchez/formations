@@ -2,7 +2,7 @@
 
 ## Résumé
 
-- Vous trouvez dans ce répertoire un fichier nommé `pachadataformation.sql`.
+- Vous trouvez dans ce répertoire un fichier nommé [`pachadataformation.sql`](./pachadataformation.sql).
 - Il contient le code qui permet de recréer la base PachadataFormation sur MySQL ou MariaDB.
 - Ce fichier a été créé par l'utilitaire `mysqldump` dans MariaDB.
 - Nous allons utiliser les outils en ligne de commande pour recréer cette base.
