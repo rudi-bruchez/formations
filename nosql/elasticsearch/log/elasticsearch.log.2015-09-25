@@ -1,0 +1,15 @@
+[2015-09-25 13:38:47,257][INFO ][node                     ] [Scott Summers] version[1.5.0], pid[1], build[5448160/2015-03-23T14:30:58Z]
+[2015-09-25 13:38:47,306][INFO ][node                     ] [Scott Summers] initializing ...
+[2015-09-25 13:38:47,363][INFO ][plugins                  ] [Scott Summers] loaded [], sites [inquisitor]
+[2015-09-25 13:38:52,397][INFO ][node                     ] [Scott Summers] initialized
+[2015-09-25 13:38:52,398][INFO ][node                     ] [Scott Summers] starting ...
+[2015-09-25 13:38:52,665][INFO ][transport                ] [Scott Summers] bound_address {inet[/0:0:0:0:0:0:0:0:9300]}, publish_address {inet[/172.17.0.51:9300]}
+[2015-09-25 13:38:52,710][INFO ][discovery                ] [Scott Summers] elasticsearch/oYyh-qDNSr-oD-5Ci1xhaQ
+[2015-09-25 13:38:56,522][INFO ][cluster.service          ] [Scott Summers] new_master [Scott Summers][oYyh-qDNSr-oD-5Ci1xhaQ][e40910434957][inet[/172.17.0.51:9300]], reason: zen-disco-join (elected_as_master)
+[2015-09-25 13:38:56,543][INFO ][http                     ] [Scott Summers] bound_address {inet[/0:0:0:0:0:0:0:0:9200]}, publish_address {inet[/172.17.0.51:9200]}
+[2015-09-25 13:38:56,543][INFO ][node                     ] [Scott Summers] started
+[2015-09-25 13:38:57,520][INFO ][gateway                  ] [Scott Summers] recovered [2] indices into cluster_state
+[2015-09-25 15:09:52,894][INFO ][node                     ] [Scott Summers] stopping ...
+[2015-09-25 15:09:53,102][INFO ][node                     ] [Scott Summers] stopped
+[2015-09-25 15:09:53,102][INFO ][node                     ] [Scott Summers] closing ...
+[2015-09-25 15:09:53,108][INFO ][node                     ] [Scott Summers] closed

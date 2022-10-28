@@ -1,0 +1,6 @@
+#!/bin/bash
+
+# exécute le fichier Runfile dans le répertoire de l'image définie en paramètre
+if [ -n "$1" ]; then
+	. ../$1/Runfile
+fi

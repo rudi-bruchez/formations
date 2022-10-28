@@ -1,0 +1,14 @@
+#!/bin/bash
+
+IMAGE_NAME=mongo
+
+docker run -d --name mongo-shard-1 ${IMAGE_NAME} --shardsvr --noprealloc --smallfiles
+docker run -d --name mongo-shard-2 ${IMAGE_NAME} --shardsvr --noprealloc --smallfiles
+docker run -d --name mongo-shard-c ${IMAGE_NAME} --noprealloc --smallfiles
+CONFIGDB=$(docker inspect --format '{{ .NetworkSettings.IPAddress }}' mongo-shard-c)
+docker run -d --name mongo-shard-s --entrypoint /usr/bin/mongos ${IMAGE_NAME} --configdb ${CONFIGDB}:27017
+docker inspect --format '{{ .NetworkSettings.IPAddress }}' mongo-shard-1
+docker inspect --format '{{ .NetworkSettings.IPAddress }}' mongo-shard-2
+docker inspect --format '{{ .NetworkSettings.IPAddress }}' mongo-shard-c
+docker exec -it mongo-shard-s /bin/bash
+

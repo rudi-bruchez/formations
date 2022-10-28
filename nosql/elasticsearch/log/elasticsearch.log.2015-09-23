@@ -1,0 +1,31 @@
+[2015-09-23 19:12:14,694][INFO ][node                     ] [Raa of the Caves] version[1.5.0], pid[1], build[5448160/2015-03-23T14:30:58Z]
+[2015-09-23 19:12:14,694][INFO ][node                     ] [Raa of the Caves] initializing ...
+[2015-09-23 19:12:14,700][INFO ][plugins                  ] [Raa of the Caves] loaded [], sites [inquisitor]
+[2015-09-23 19:12:17,147][INFO ][node                     ] [Raa of the Caves] initialized
+[2015-09-23 19:12:17,148][INFO ][node                     ] [Raa of the Caves] starting ...
+[2015-09-23 19:12:17,272][INFO ][transport                ] [Raa of the Caves] bound_address {inet[/0:0:0:0:0:0:0:0:9300]}, publish_address {inet[/172.17.0.4:9300]}
+[2015-09-23 19:12:17,363][INFO ][discovery                ] [Raa of the Caves] elasticsearch/PuaQDnXDTTqF6SlxC-nicw
+[2015-09-23 19:12:21,139][INFO ][cluster.service          ] [Raa of the Caves] new_master [Raa of the Caves][PuaQDnXDTTqF6SlxC-nicw][a2354e99a2ec][inet[/172.17.0.4:9300]], reason: zen-disco-join (elected_as_master)
+[2015-09-23 19:12:21,154][INFO ][http                     ] [Raa of the Caves] bound_address {inet[/0:0:0:0:0:0:0:0:9200]}, publish_address {inet[/172.17.0.4:9200]}
+[2015-09-23 19:12:21,154][INFO ][node                     ] [Raa of the Caves] started
+[2015-09-23 19:12:21,228][INFO ][gateway                  ] [Raa of the Caves] recovered [0] indices into cluster_state
+[2015-09-23 19:13:55,521][INFO ][node                     ] [Raa of the Caves] stopping ...
+[2015-09-23 19:13:55,549][INFO ][node                     ] [Raa of the Caves] stopped
+[2015-09-23 19:13:55,550][INFO ][node                     ] [Raa of the Caves] closing ...
+[2015-09-23 19:13:55,566][INFO ][node                     ] [Raa of the Caves] closed
+[2015-09-23 19:14:01,489][INFO ][node                     ] [Arizona Annie] version[1.5.0], pid[1], build[5448160/2015-03-23T14:30:58Z]
+[2015-09-23 19:14:01,489][INFO ][node                     ] [Arizona Annie] initializing ...
+[2015-09-23 19:14:01,495][INFO ][plugins                  ] [Arizona Annie] loaded [], sites [inquisitor]
+[2015-09-23 19:14:03,698][INFO ][node                     ] [Arizona Annie] initialized
+[2015-09-23 19:14:03,699][INFO ][node                     ] [Arizona Annie] starting ...
+[2015-09-23 19:14:03,785][INFO ][transport                ] [Arizona Annie] bound_address {inet[/0:0:0:0:0:0:0:0:9300]}, publish_address {inet[/172.17.0.5:9300]}
+[2015-09-23 19:14:03,799][INFO ][discovery                ] [Arizona Annie] elasticsearch/ipHxvd5QS8a748rY1ShBtA
+[2015-09-23 19:14:07,567][INFO ][cluster.service          ] [Arizona Annie] new_master [Arizona Annie][ipHxvd5QS8a748rY1ShBtA][50a2d0a68f79][inet[/172.17.0.5:9300]], reason: zen-disco-join (elected_as_master)
+[2015-09-23 19:14:07,586][INFO ][http                     ] [Arizona Annie] bound_address {inet[/0:0:0:0:0:0:0:0:9200]}, publish_address {inet[/172.17.0.5:9200]}
+[2015-09-23 19:14:07,587][INFO ][node                     ] [Arizona Annie] started
+[2015-09-23 19:14:07,597][INFO ][gateway                  ] [Arizona Annie] recovered [0] indices into cluster_state
+[2015-09-23 19:43:55,680][INFO ][cluster.metadata         ] [Arizona Annie] [blog] creating index, cause [auto(index api)], templates [], shards [5]/[1], mappings [user]
+[2015-09-23 19:43:55,971][INFO ][cluster.metadata         ] [Arizona Annie] [blog] update_mapping [user] (dynamic)
+[2015-09-23 19:43:56,023][INFO ][cluster.metadata         ] [Arizona Annie] [blog] update_mapping [post] (dynamic)
+[2015-09-23 20:01:47,718][INFO ][cluster.metadata         ] [Arizona Annie] [comicbook] creating index, cause [auto(index api)], templates [], shards [5]/[1], mappings [superhero]
+[2015-09-23 20:01:47,838][INFO ][cluster.metadata         ] [Arizona Annie] [comicbook] update_mapping [superhero] (dynamic)

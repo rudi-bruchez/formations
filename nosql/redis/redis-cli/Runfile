@@ -1,0 +1,1 @@
+sudo docker run --link redis:db -i -v /media/rudi/zenon/docker/nosql/code:/code -t babaluga/redis-cli /bin/bash

@@ -1,0 +1,9 @@
+#!/bin/bash
+
+# suppression de tous les containers
+
+if [ -n "$1" ]; then
+	sudo docker ps -a -q | sudo xargs docker rm -f
+	sudo docker rmi -f babaluga/$1
+	sudo docker build -t babaluga/$1 ../$1
+fi

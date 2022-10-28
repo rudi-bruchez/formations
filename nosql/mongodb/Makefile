@@ -1,0 +1,69 @@
+CID_FILE = /tmp/mongodb.cid
+CID =`cat $(CID_FILE)`
+#IMAGE_NAME = babaluga/mongodb
+IMAGE_NAME = mongo
+CONTAINER_NAME = mongodb
+PORTS = -p 27017:27017
+
+help:
+	@echo "Please use 'make <target>' where <target> is one of"
+	@echo "  build           build the docker image containing a redis cluster"
+	@echo "  rebuild         rebuilds the image from scratch without using any cached layers"
+	@echo "  run             run the built docker image"
+	@echo "  bash            starts bash inside a running container."
+	@echo "  clean           removes the tmp cid file on disk"
+	@echo "  cli             run redis-cli inside the container on the server with port 7000"
+
+build:
+	@echo "Building docker image..."
+	docker build -t ${IMAGE_NAME} .
+
+rebuild:
+	@echo "Rebuilding docker image..."
+	docker build --no-cache=true -t ${IMAGE_NAME} .
+
+run:
+	@echo "Running docker image..."
+	docker run -d $(PORTS) --name $(CONTAINER_NAME) --cidfile $(CID_FILE) -v $(pwd):/home/docker/data -w /home/docker/data -i -t ${IMAGE_NAME}
+
+replset:
+	docker run -d --name mongo-rs-1 -i -t ${IMAGE_NAME} --replSet rs1 
+	docker run -d --name mongo-rs-2 -i -t ${IMAGE_NAME} --replSet rs1
+	docker run -d --name mongo-rs-3 -i -t ${IMAGE_NAME} --replSet rs1
+	docker inspect --format '{{ .NetworkSettings.IPAddress }}' mongo-rs-1
+	docker inspect --format '{{ .NetworkSettings.IPAddress }}' mongo-rs-2
+	docker inspect --format '{{ .NetworkSettings.IPAddress }}' mongo-rs-3
+	docker exec -it mongo-rs-1 /bin/bash
+
+shard:
+	@echo "\\033[1;32m" "On crée les shards..." "\\033[0;39m"
+	@. ./Makefile.shard
+
+bash:
+	docker exec -it mon-mongo /bin/bash
+
+stop:
+	-docker stop $(CID)
+	-docker stop mongo-rs-1
+	-docker stop mongo-rs-2
+	-docker stop mongo-rs-3
+	-docker stop mongo-shard-1
+	-docker stop mongo-shard-2
+	-docker stop mongo-shard-C
+	-docker stop mongo-shard-s
+	-make clean
+
+clean:
+	# Cleanup cidfile on disk
+	-docker ps -a -q | xargs docker rm -f
+	-rm -f $(CID_FILE)
+	-rm -f /tmp/mongo-rs-1.cid 
+	-rm -f /tmp/mongo-rs-2.cid
+	-rm -f /tmp/mongo-rs-3.cid
+	-rm -f /tmp/mongo-shard-1.cid
+	-rm -f /tmp/mongo-shard-2.cid
+	-rm -f /tmp/mongo-shard-c.cid
+	-rm -f /tmp/mongo-shard-s.cid
+
+cli:
+	docker exec -it $(CID) /redis/src/redis-cli -p 7000

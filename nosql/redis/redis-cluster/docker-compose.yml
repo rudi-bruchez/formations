@@ -1,0 +1,14 @@
+redis-cluster-1:
+  build: .
+  expose:
+    - 7000
+
+redis-cluster-2:
+  build: .
+  expose:
+    - 7000
+
+redis-cluster-3:
+  build: .
+  expose:
+    - 7000

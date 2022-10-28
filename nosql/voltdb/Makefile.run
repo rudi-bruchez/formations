@@ -1,0 +1,3 @@
+#!/bin/bash
+
+xdg-open http://$(docker port voltdb-demo 8081)

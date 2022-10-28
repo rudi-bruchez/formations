@@ -1,0 +1,29 @@
+[2015-11-26 21:18:39,088][INFO ][node                     ] [Eugene Judd] version[1.5.0], pid[1], build[5448160/2015-03-23T14:30:58Z]
+[2015-11-26 21:18:39,089][INFO ][node                     ] [Eugene Judd] initializing ...
+[2015-11-26 21:18:39,143][INFO ][plugins                  ] [Eugene Judd] loaded [], sites [inquisitor]
+[2015-11-26 21:18:44,422][INFO ][node                     ] [Eugene Judd] initialized
+[2015-11-26 21:18:44,423][INFO ][node                     ] [Eugene Judd] starting ...
+[2015-11-26 21:18:44,697][INFO ][transport                ] [Eugene Judd] bound_address {inet[/0:0:0:0:0:0:0:0:9300]}, publish_address {inet[/172.17.0.1:9300]}
+[2015-11-26 21:18:44,729][INFO ][discovery                ] [Eugene Judd] elasticsearch/gKP5q8aeRReMGhT1-5ptzA
+[2015-11-26 21:18:48,538][INFO ][cluster.service          ] [Eugene Judd] new_master [Eugene Judd][gKP5q8aeRReMGhT1-5ptzA][e596a9055631][inet[/172.17.0.1:9300]], reason: zen-disco-join (elected_as_master)
+[2015-11-26 21:18:48,564][INFO ][http                     ] [Eugene Judd] bound_address {inet[/0:0:0:0:0:0:0:0:9200]}, publish_address {inet[/172.17.0.1:9200]}
+[2015-11-26 21:18:48,564][INFO ][node                     ] [Eugene Judd] started
+[2015-11-26 21:18:49,637][INFO ][gateway                  ] [Eugene Judd] recovered [2] indices into cluster_state
+[2015-11-26 21:19:18,556][INFO ][cluster.routing.allocation.decider] [Eugene Judd] low disk watermark [15%] exceeded on [gKP5q8aeRReMGhT1-5ptzA][Eugene Judd] free: 253.9gb[13.8%], replicas will not be assigned to this node
+[2015-11-26 21:19:48,547][INFO ][cluster.routing.allocation.decider] [Eugene Judd] low disk watermark [15%] exceeded on [gKP5q8aeRReMGhT1-5ptzA][Eugene Judd] free: 253.9gb[13.8%], replicas will not be assigned to this node
+[2015-11-26 21:20:18,548][INFO ][cluster.routing.allocation.decider] [Eugene Judd] low disk watermark [15%] exceeded on [gKP5q8aeRReMGhT1-5ptzA][Eugene Judd] free: 253.9gb[13.8%], replicas will not be assigned to this node
+[2015-11-26 21:20:48,548][INFO ][cluster.routing.allocation.decider] [Eugene Judd] low disk watermark [15%] exceeded on [gKP5q8aeRReMGhT1-5ptzA][Eugene Judd] free: 253.9gb[13.8%], replicas will not be assigned to this node
+[2015-11-26 21:21:18,546][INFO ][cluster.routing.allocation.decider] [Eugene Judd] low disk watermark [15%] exceeded on [gKP5q8aeRReMGhT1-5ptzA][Eugene Judd] free: 253.9gb[13.8%], replicas will not be assigned to this node
+[2015-11-26 21:21:48,548][INFO ][cluster.routing.allocation.decider] [Eugene Judd] low disk watermark [15%] exceeded on [gKP5q8aeRReMGhT1-5ptzA][Eugene Judd] free: 253.9gb[13.8%], replicas will not be assigned to this node
+[2015-11-26 21:22:18,547][INFO ][cluster.routing.allocation.decider] [Eugene Judd] low disk watermark [15%] exceeded on [gKP5q8aeRReMGhT1-5ptzA][Eugene Judd] free: 253.9gb[13.8%], replicas will not be assigned to this node
+[2015-11-26 21:22:48,547][INFO ][cluster.routing.allocation.decider] [Eugene Judd] low disk watermark [15%] exceeded on [gKP5q8aeRReMGhT1-5ptzA][Eugene Judd] free: 253.9gb[13.8%], replicas will not be assigned to this node
+[2015-11-26 21:23:18,548][INFO ][cluster.routing.allocation.decider] [Eugene Judd] low disk watermark [15%] exceeded on [gKP5q8aeRReMGhT1-5ptzA][Eugene Judd] free: 253.9gb[13.8%], replicas will not be assigned to this node
+[2015-11-26 21:23:48,548][INFO ][cluster.routing.allocation.decider] [Eugene Judd] low disk watermark [15%] exceeded on [gKP5q8aeRReMGhT1-5ptzA][Eugene Judd] free: 253.9gb[13.8%], replicas will not be assigned to this node
+[2015-11-26 21:24:18,548][INFO ][cluster.routing.allocation.decider] [Eugene Judd] low disk watermark [15%] exceeded on [gKP5q8aeRReMGhT1-5ptzA][Eugene Judd] free: 253.9gb[13.8%], replicas will not be assigned to this node
+[2015-11-26 21:24:48,547][INFO ][cluster.routing.allocation.decider] [Eugene Judd] low disk watermark [15%] exceeded on [gKP5q8aeRReMGhT1-5ptzA][Eugene Judd] free: 253.9gb[13.8%], replicas will not be assigned to this node
+[2015-11-26 21:25:18,547][INFO ][cluster.routing.allocation.decider] [Eugene Judd] low disk watermark [15%] exceeded on [gKP5q8aeRReMGhT1-5ptzA][Eugene Judd] free: 253.9gb[13.8%], replicas will not be assigned to this node
+[2015-11-26 21:25:48,548][INFO ][cluster.routing.allocation.decider] [Eugene Judd] low disk watermark [15%] exceeded on [gKP5q8aeRReMGhT1-5ptzA][Eugene Judd] free: 253.9gb[13.8%], replicas will not be assigned to this node
+[2015-11-26 21:26:18,550][INFO ][cluster.routing.allocation.decider] [Eugene Judd] low disk watermark [15%] exceeded on [gKP5q8aeRReMGhT1-5ptzA][Eugene Judd] free: 253.9gb[13.8%], replicas will not be assigned to this node
+[2015-11-26 21:26:48,549][INFO ][cluster.routing.allocation.decider] [Eugene Judd] low disk watermark [15%] exceeded on [gKP5q8aeRReMGhT1-5ptzA][Eugene Judd] free: 253.9gb[13.8%], replicas will not be assigned to this node
+[2015-11-26 21:27:18,553][INFO ][cluster.routing.allocation.decider] [Eugene Judd] low disk watermark [15%] exceeded on [gKP5q8aeRReMGhT1-5ptzA][Eugene Judd] free: 253.9gb[13.8%], replicas will not be assigned to this node
+[2015-11-26 21:27:48,549][INFO ][cluster.routing.allocation.decider] [Eugene Judd] low disk watermark [15%] exceeded on [gKP5q8aeRReMGhT1-5ptzA][Eugene Judd] free: 253.9gb[13.8%], replicas will not be assigned to this node
