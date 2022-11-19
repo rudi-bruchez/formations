@@ -1,0 +1,12 @@
+
+```sql
+CREATE DATABASE toto WITH LEDGER = ON
+
+CREATE TABLE dbo.Commentaire
+(
+CommentaireId INT NOT NULL,
+Commentaire NVARCHAR (MAX) NOT NULL,
+DateCommentaire Datetime2(0) NOT NULL DEFAULT (SYSDATETIME())
+)
+WITH (LEDGER = ON, SYSTEM_VERSIONING = ON);
+```

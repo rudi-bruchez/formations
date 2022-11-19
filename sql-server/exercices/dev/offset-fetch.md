@@ -1,0 +1,9 @@
+# OFFSET FETCH
+
+```sql	
+SELECT *
+FROM Contact.Contact
+ORDER BY Nom
+OFFSET 10 ROWS
+FETCH NEXT (SELECT COUNT(*) FROM Contact.Contact) / 10 ROWS ONLY
+```
