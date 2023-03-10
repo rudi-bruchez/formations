@@ -2,26 +2,24 @@
 
 Objectif : Chiffrer le contenu d'une colonne dans une base de données en utilisant des clés de chiffrement.
 
-```sql	
-CREATE DATABASE [ColumnEncryptionDB]
-GO
-
-USE [ColumnEncryptionDB]
-GO
-
-
 Prérequis :
 
 - Avoir des connaissances de base en SQL Server.
 - Avoir une base de données nommée "PachadataFormation" avec une table nommée "Employe" contenant une colonne "Salaire".
 
+## Création de la table "Employe"
+
 ```sql
+USE PachadataFormation;
+GO
+
+-- DROP TABLE IF EXISTS Contact.Employe;
 CREATE TABLE Contact.Employe (
     EmployeId INT NOT NULL PRIMARY KEY IDENTITY(1, 1),
     Nom VARCHAR(50) NOT NULL,
     Prenom VARCHAR(50) NOT NULL,
     DateEmbauche DATE NOT NULL,
-    Salaire DECIMAL(10,2) NOT NULL
+    SalaireChiffre VARBINARY(200) NOT NULL
 );
 ```
 
@@ -30,6 +28,10 @@ CREATE TABLE Contact.Employe (
 Créez un certificat pour utiliser comme clé de chiffrement en utilisant la commande suivante :
 
 ```sql
+CREATE MASTER KEY ENCRYPTION BY  
+PASSWORD = 'P@ssw0rd';
+GO
+
 CREATE CERTIFICATE EmployeSalaireCert  
 WITH SUBJECT = 'Chiffrement de colonne Salaire';  
 ```
@@ -49,14 +51,17 @@ ENCRYPTION BY CERTIFICATE EmployeSalaireCert;
 Créez une UDF pour encapsuler le code de chiffrement de la colonne "Salaire" en utilisant la commande suivante :
 
 ```sql
-CREATE FUNCTION dbo.fnEncryptSalaire(@Salaire DECIMAL(10,2))  
-RETURNS VARBINARY(8000)  
+CREATE OR ALTER FUNCTION Contact.fnChiffreSalaire(
+	@Salaire DECIMAL(10,2)
+)  
+RETURNS VARBINARY(200)  
 WITH ENCRYPTION  
 AS BEGIN  
-    DECLARE @Result VARBINARY(8000);  
-    SET @Result = EncryptByKey(Key_GUID('EmployeeSalaireKey'), @Salaire);  
-    RETURN @Result;  
-END;  
+    RETURN EncryptByKey(Key_GUID('EmployeSalaireKey'), 
+			CAST(@Salaire AS VARCHAR(11))
+		);  
+END;
+GO
 ```
 
 ## Étape 4 : Insérer les données chiffrées
@@ -64,14 +69,16 @@ END;
 Chiffrez la colonne "Salaire" en utilisant la clé de chiffrement "EmployeSalaireKey" créée dans l'étape 2 en utilisant la commande suivante :
 
 ```sql
-INSERT INTO Employe (EmployeID, Nom, Prenom, DateEmbauche, Salaire)  
+-- TRUNCATE TABLE Contact.Employe
+INSERT INTO Contact.Employe (Nom, Prenom, DateEmbauche, SalaireChiffre)  
 VALUES 
-    (1, 'Bouzidi', 'Amina', '2022-01-01', dbo.fnEncryptSalaire(50000.00)),
-    (2, 'Mandela', 'Amina', '2022-02-01', dbo.fnEncryptSalaire(60000.00)),
-    (3, 'Lee', 'Jung-Mi', '2022-03-01', dbo.fnEncryptSalaire(55000.00)),
-    (4, 'Garcia', 'Maria', '2022-04-01', dbo.fnEncryptSalaire(45000.00)),
-    (5, 'Patel', 'Priya', '2022-05-01', dbo.fnEncryptSalaire(65000.00)),
-    (6, 'Ali', 'Fatima', '2022-06-01', dbo.fnEncryptSalaire(50000.00));
+    ('Bouzidi', 'Amina', '2022-01-01', Contact.fnChiffreSalaire(50000.00)),
+    ('Mandela', 'Amina', '2022-02-01', Contact.fnChiffreSalaire(60000.00)),
+    ('Lee', 'Jung-Mi', '2022-03-01', Contact.fnChiffreSalaire(55000.00)),
+    ('Garcia', 'Maria', '2022-04-01', Contact.fnChiffreSalaire(45000.00)),
+    ('Patel', 'Priya', '2022-05-01', Contact.fnChiffreSalaire(65000.00)),
+    ('Ali', 'Fatima', '2022-06-01', Contact.fnChiffreSalaire(50000.00));
+GO
 
 ```
 
@@ -81,10 +88,8 @@ Cette commande va chiffrer la colonne "Salaire" en utilisant la clé de chiffrem
 Testez le chiffrement en exécutant la commande suivante :
 
 ```sql
-SELECT Salaire  
-FROM Contact.Employe  
-WHERE employee_id = 1;  
-
+SELECT *  
+FROM Contact.Employe;  
 ```
 
 Cette commande devrait renvoyer une valeur chiffrée pour la colonne "Salaire".
@@ -97,11 +102,9 @@ OPEN SYMMETRIC KEY EmployeSalaireKey
 DECRYPTION BY CERTIFICATE EmployeSalaireCert  
 
 SELECT  
-    employee_id,  
-    CONVERT(VARCHAR(50), DECRYPTBYKEY(Salaire)) AS Salaire  
-FROM Contact.Employe  
-WHERE employee_id = 1;  
-
+    *,  
+    CAST(DECRYPTBYKEY(SalaireChiffre) as VARCHAR(11)) AS Salaire  
+FROM Contact.Employe;  
 ```
 
 Cette commande va ouvrir la clé de chiffrement "EmployeSalaireKey" et déchiffrer la colonne "Salaire" pour l'employé ayant un ID de 1.
