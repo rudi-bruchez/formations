@@ -49,3 +49,51 @@ VALUES
 -- test
 DELETE FROM [Inscription].[EvaluationFormation]
 ```
+
+## Ledger avec mise à jour
+
+Les tables de Ledger avec mise à jour possible peuvent être interrogées pour suivre l'historique des modifications. Une vue permet d'interroger les données avec des colonnes d'audit supplémentaires.
+
+```sql
+-- Historique des modifications de structure
+SELECT * FROM sys.ledger_table_history;
+
+-- Les transactions effectuées, avec leur hash
+SELECT * FROM sys.database_ledger_transactions;
+
+-- Les blocs de l'arbre de Merkle
+SELECT * FROM sys.database_ledger_blocks;
+
+-- Les digests
+SELECT * FROM sys.database_ledger_digest_locations;
+
+-- Générer un digest
+EXEC EXEC sys.sp_generate_database_ledger_digest;
+```
+
+Un digest, calculé à la demande, est la racine de l'arbre de Merkle.
+
+Un exemple de digest en retour de la procédure stockée :
+
+```json
+{"database_name":"pachadata","block_id":0,"hash":"0x586862FBBE007306A7EAAC0D3416C1ABEC47941EF79AB83755208903D28D307F","last_transaction_commit_time":"2023-08-15T18:58:20.3566667","digest_time":"2023-08-16T06:09:47.1258435"}
+```
+
+## Vérification du digest
+
+```sql
+DECLARE @digest_locations NVARCHAR(MAX) = (SELECT * FROM sys.database_ledger_digest_locations FOR JSON AUTO, INCLUDE_NULL_VALUES);SELECT @digest_locations as digest_locations;
+BEGIN TRY
+    EXEC sys.sp_verify_database_ledger_from_digest_storage @digest_locations;
+    SELECT 'Ledger verification succeeded.' AS Result;
+END TRY
+BEGIN CATCH
+    THROW;
+END CATCH
+
+-- une modification
+UPDATE [EvaluationFormation]
+SET [Note] = 1,
+	[Commentaire] = 'Formateur nullissime'
+WHERE [InscriptionId] = 134
+```
