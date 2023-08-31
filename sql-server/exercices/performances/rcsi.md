@@ -1,0 +1,10 @@
+# Read Committed Snapshot
+
+```sql	
+USE [master]
+GO
+ALTER DATABASE [AdventureWorks2019] 
+SET READ_COMMITTED_SNAPSHOT ON 
+WITH ROLLBACK IMMEDIATE
+GO
+```

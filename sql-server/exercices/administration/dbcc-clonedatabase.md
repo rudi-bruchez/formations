@@ -11,3 +11,11 @@ The DBCC CLONEDATABASE command creates a clone of a database. The clone is a rea
 ```sql
 DBCC CLONEDATABASE (AdventureWorks2019, AdventureWorks2019_clone) WITH VERIFY_CLONEDB, BACKUP_CLONEDB
 ```
+
+## Result
+
+```sql
+DATABASEPROPERTYEX('nom_de_la_base', 'IsClone') 
+DATABASEPROPERTYEX('nom_de_la_base', 'IsVerifiedClone') 
+```
+
