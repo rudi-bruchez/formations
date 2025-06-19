@@ -7,7 +7,7 @@ USE test_bin;
 GO
 
 SELECT 
-	message_id
+	CAST(message_id as DECIMAL(38, 12)) as id
 INTO dbo.test
 FROM sys.messages
 

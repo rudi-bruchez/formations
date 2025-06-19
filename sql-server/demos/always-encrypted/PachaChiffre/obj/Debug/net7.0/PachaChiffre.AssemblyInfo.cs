@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("PachaChiffre")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+4e84809ba332fe1bae56611f621038af634c1f63")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+5ee01be1a51656d05ee82113e47455f6c7b4193d")]
 [assembly: System.Reflection.AssemblyProductAttribute("PachaChiffre")]
 [assembly: System.Reflection.AssemblyTitleAttribute("PachaChiffre")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
