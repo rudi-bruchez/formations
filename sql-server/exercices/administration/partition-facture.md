@@ -1,0 +1,101 @@
+USE [PachaDataFormation]
+GO
+BEGIN TRANSACTION
+
+CREATE PARTITION FUNCTION [pf_Facture](date) 
+AS RANGE LEFT FOR VALUES (
+	N'1953-01-01', N'1954-01-01', N'1955-01-01', N'1956-01-01',
+	N'1957-01-01', N'1958-01-01', N'1959-01-01', N'1960-01-01', 
+	N'1961-01-01', N'1962-01-01', 
+	N'1963-01-01', N'1964-01-01', N'1965-01-01', N'1966-01-01', 
+	N'1967-01-01', N'1968-01-01', N'1969-01-01', N'1970-01-01', 
+	N'1971-01-01', N'1972-01-01', N'1973-01-01', N'1974-01-01', 
+	N'1975-01-01', N'1976-01-01', N'1977-01-01', N'1978-01-01', 
+	N'1979-01-01', N'1980-01-01', N'1981-01-01', N'1982-01-01', 
+	N'1983-01-01', N'1984-01-01', N'1985-01-01', N'1986-01-01', 
+	N'1987-01-01', N'1988-01-01', N'1989-01-01', N'1990-01-01', 
+	N'1991-01-01', N'1992-01-01', N'1993-01-01', N'1994-01-01', 
+	N'1995-01-01', N'1996-01-01', N'1997-01-01', N'1998-01-01', 
+	N'1999-01-01', N'2000-01-01', N'2001-01-01', N'2002-01-01', 
+	N'2003-01-01', N'2004-01-01', N'2005-01-01', N'2006-01-01', 
+	N'2007-01-01', N'2008-01-01', N'2009-01-01', N'2010-01-01', 
+	N'2011-01-01', N'2012-01-01')
+
+
+CREATE PARTITION SCHEME [ps_Facture] 
+AS PARTITION [pf_Facture] ALL TO ([PRIMARY])
+
+
+
+
+CREATE CLUSTERED INDEX [ClusteredIndex_on_ps_Facture_638047241293988889] 
+ON [dbo].[Facture]
+(
+	[DateFacture]
+)WITH (DATA_COMPRESSION = ROW ON PARTITIONS (1 TO 61)) 
+ON [ps_Facture]([DateFacture])
+
+
+DROP INDEX [ClusteredIndex_on_ps_Facture_638047241293988889] ON [dbo].[Facture]
+
+COMMIT TRANSACTION
+
+/*
+SELECT TOP 0 *
+INTO FactureArchive
+FROM Facture
+*/
+
+ALTER TABLE Facture
+SWITCH PARTITION 1 TO FactureArchive
+
+SELECT *
+FROM Facture
+WHERE DateFacture = '1953-03-06'
+
+SELECT *
+FROM sys.tables
+ORDER BY Name
+
+SELECT *
+FROM sys.partitions
+WHERE object_id  = 67531324
+
+
+
+
+
+
+CREATE TABLE Facture (
+	FactureId bigint,
+	DateFacture date,
+	MontantHT NUMERIC(38,2),
+	MontantTTC NUMERIC(38,2)
+)
+GO
+
+INSERT INTO Facture
+SELECT
+	ROW_NUMBER() OVER (ORDER BY FactureCD),
+	DateFacture,
+	MontantHT,
+	MontantTTC
+FROM Inscription.Facture
+CROSS JOIN (VALUES (1), (1), (1), (1), (1), (1), (1), (1)) t(v)
+
+
+
+SELECT *
+FROM Facture
+
+ALTER TABLE Facture
+REBUILD WITH (DATA_COMPRESSION = ROW)
+
+ALTER TABLE Facture
+REBUILD WITH (DATA_COMPRESSION = PAGE)
+
+
+SELECT YEAR(DateFacture), COUNT(*)
+FROM Facture
+GROUP BY YEAR(DateFacture)
+ORDER BY YEAR(DateFacture)
