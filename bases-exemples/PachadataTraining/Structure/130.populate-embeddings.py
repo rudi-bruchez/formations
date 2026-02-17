@@ -4,22 +4,33 @@ import time
 import hashlib
 from datetime import datetime, timezone
 
+os.environ.setdefault("HF_HUB_DISABLE_SYMLINKS_WARNING", "1")
+
+import ctranslate2
+import numpy as np
 import pyodbc
 from dotenv import load_dotenv
-from openai import OpenAI
+from huggingface_hub import snapshot_download
+from transformers import AutoTokenizer
 
 # -----------------------------------------------------------------------------
 # Config
 # -----------------------------------------------------------------------------
-EMBEDDING_MODEL = "text-embedding-3-small"  # 1536 dims by default :contentReference[oaicite:2]{index=2}
-EXPECTED_DIMS = 1536
+EMBEDDING_MODEL = "michaelfeil/ct2fast-e5-large-v2"
+TOKENIZER_MODEL = "intfloat/e5-large-v2"
+EXPECTED_DIMS = 1024
+EMBEDDING_DEVICE = os.getenv("EMBEDDING_DEVICE", "auto")
+EMBEDDING_COMPUTE_TYPE = os.getenv("EMBEDDING_COMPUTE_TYPE", "int8_float16")
+EMBEDDING_CPU_COMPUTE_TYPE = os.getenv("EMBEDDING_CPU_COMPUTE_TYPE", "int8")
+HF_TOKEN = os.getenv("HF_TOKEN")
+HF_HUB_DISABLE_SYMLINKS_WARNING = os.getenv("HF_HUB_DISABLE_SYMLINKS_WARNING", "1")
 
 # You can change this to: "Title", "Description", "Title+Description", etc.
-EMBEDDING_TYPE = "Title+Description"
+EMBEDDING_TYPE = "Description"
 
 # Batch sizes (tune based on your network + API limits)
 SQL_BATCH_SIZE = 200
-API_BATCH_SIZE = 100  # OpenAI embeddings API supports batching inputs
+API_BATCH_SIZE = 100
 
 # -----------------------------------------------------------------------------
 # Helpers
@@ -34,9 +45,79 @@ def utc_now_dt2() -> str:
 def build_course_text(title: str, description: str) -> str:
     title = (title or "").strip()
     description = (description or "").strip()
-    if title and description:
-        return f"{title}\n\n{description}"
-    return title or description or ""
+
+    match EMBEDDING_TYPE:
+        case "Title":  return title
+        case "Description": return description
+        case "Title+Description": return f"{title}\n\n{description}" if description else title
+        case _: raise ValueError(f"Unsupported EMBEDDING_TYPE: {EMBEDDING_TYPE}")
+
+    return ""
+
+def resolve_ct2_model_dir(model_ref: str) -> str:
+    if os.path.isdir(model_ref) and os.path.isfile(os.path.join(model_ref, "model.bin")):
+        return model_ref
+
+    local_dir = snapshot_download(
+        repo_id=model_ref,
+        token=HF_TOKEN,
+    )
+
+    if os.path.isfile(os.path.join(local_dir, "model.bin")):
+        return local_dir
+
+    for root, _, files in os.walk(local_dir):
+        if "model.bin" in files:
+            return root
+
+    raise RuntimeError(
+        f"No CTranslate2 model.bin found in '{model_ref}' (downloaded to '{local_dir}'). "
+        "Set EMBEDDING_MODEL to a local CT2 model directory or a HF repo containing model.bin."
+    )
+
+def is_cuda_loader_issue(exc: RuntimeError) -> bool:
+    msg = str(exc).lower()
+    return (
+        "cublas" in msg
+        or "cudnn" in msg
+        or "cuda" in msg
+        or "cannot be loaded" in msg
+    )
+
+def create_encoder_with_fallback(model_dir: str) -> tuple[ctranslate2.Encoder, str]:
+    preferred_device = EMBEDDING_DEVICE.lower().strip()
+
+    if preferred_device == "auto":
+        candidates = [
+            ("cuda", EMBEDDING_COMPUTE_TYPE),
+            ("cpu", EMBEDDING_CPU_COMPUTE_TYPE),
+        ]
+    elif preferred_device == "cuda":
+        candidates = [
+            ("cuda", EMBEDDING_COMPUTE_TYPE),
+            ("cpu", EMBEDDING_CPU_COMPUTE_TYPE),
+        ]
+    else:
+        candidates = [(preferred_device, EMBEDDING_CPU_COMPUTE_TYPE)]
+
+    last_error = None
+    for device, compute_type in candidates:
+        try:
+            encoder = ctranslate2.Encoder(
+                model_dir,
+                device=device,
+                compute_type=compute_type,
+            )
+            print(f"Embedding device: {device} ({compute_type})")
+            return encoder, device
+        except RuntimeError as exc:
+            last_error = exc
+            if device == "cuda" and is_cuda_loader_issue(exc):
+                print("CUDA runtime not available, falling back to CPU for embeddings.")
+                continue
+            raise
+
+    raise RuntimeError(f"Unable to initialize embedding encoder: {last_error}")
 
 # -----------------------------------------------------------------------------
 # SQL
@@ -149,43 +230,63 @@ def upsert_embeddings(conn, rows):
     conn.commit()
 
 # -----------------------------------------------------------------------------
-# OpenAI embeddings
+# Local embeddings (Transformers + CTranslate2)
 # -----------------------------------------------------------------------------
-def get_embeddings(client: OpenAI, texts: list[str]) -> list[list[float]]:
-    resp = client.embeddings.create(
-        model=EMBEDDING_MODEL,
-        input=texts,
-        # dimensions parameter NOT needed here; default is 1536 for text-embedding-3-small :contentReference[oaicite:3]{index=3}
+def get_embeddings(tokenizer, encoder: ctranslate2.Encoder, texts: list[str]) -> list[list[float]]:
+    prefixed_texts = [f"passage: {text}" for text in texts]
+
+    encoded = tokenizer(
+        prefixed_texts,
+        padding=True,
+        truncation=True,
+        max_length=512,
+        return_attention_mask=True,
     )
-    vectors = [item.embedding for item in resp.data]
-    # quick sanity check
+
+    batch_tokens = [tokenizer.convert_ids_to_tokens(ids) for ids in encoded["input_ids"]]
+    output = encoder.forward_batch(batch_tokens)
+
+    last_hidden_state = np.asarray(output.last_hidden_state, dtype=np.float32)
+    attention_mask = np.array(encoded["attention_mask"], dtype=np.float32)
+
+    mask = np.expand_dims(attention_mask, axis=-1)
+    summed = np.sum(last_hidden_state * mask, axis=1)
+    counts = np.clip(np.sum(mask, axis=1), 1e-9, None)
+    pooled = summed / counts
+
+    norms = np.linalg.norm(pooled, axis=1, keepdims=True)
+    normalized = pooled / np.clip(norms, 1e-9, None)
+    vectors = normalized.tolist()
+
     for v in vectors:
         if len(v) != EXPECTED_DIMS:
             raise RuntimeError(f"Unexpected embedding dimension: got {len(v)}, expected {EXPECTED_DIMS}")
+
     return vectors
 
 # -----------------------------------------------------------------------------
 # Main
 # -----------------------------------------------------------------------------
 def main():
-    # Load .env (same style as your template) :contentReference[oaicite:4]{index=4}
+    # Load .env
     load_dotenv(os.path.join(os.path.dirname(__file__), "..", ".env"))
+    os.environ["HF_HUB_DISABLE_SYMLINKS_WARNING"] = HF_HUB_DISABLE_SYMLINKS_WARNING
 
     server = os.getenv("SQLSERVER_SERVER")
     database = os.getenv("SQLSERVER_DATABASE")
     username = os.getenv("SQLSERVER_USERNAME")
     password = os.getenv("SQLSERVER_PASSWORD")
 
-    # OpenAI
-    # Expect OPENAI_API_KEY in your environment / .env
-    client = OpenAI()
+    tokenizer = AutoTokenizer.from_pretrained(TOKENIZER_MODEL)
+    ct2_model_dir = resolve_ct2_model_dir(EMBEDDING_MODEL)
+    encoder, active_device = create_encoder_with_fallback(ct2_model_dir)
 
     if not all([server, database, username, password]):
         raise RuntimeError("Missing SQL env vars: SQLSERVER_SERVER/SQLSERVER_DATABASE/SQLSERVER_USERNAME/SQLSERVER_PASSWORD")
 
     conn = sql_connect(server, database, username, password)
     try:
-        ensure_embeddings_table(conn)
+        # ensure_embeddings_table(conn)
 
         courses = fetch_courses_to_embed(conn, limit=None)
         total = len(courses)
@@ -214,7 +315,21 @@ def main():
                 texts.append(source_text)
                 meta.append((course_id, source_text))
 
-            vectors = get_embeddings(client, texts)
+            try:
+                vectors = get_embeddings(tokenizer, encoder, texts)
+            except RuntimeError as exc:
+                if active_device == "cuda" and is_cuda_loader_issue(exc):
+                    print("CUDA execution failed during inference, retrying on CPU.")
+                    encoder = ctranslate2.Encoder(
+                        ct2_model_dir,
+                        device="cpu",
+                        compute_type=EMBEDDING_CPU_COMPUTE_TYPE,
+                    )
+                    active_device = "cpu"
+                    print(f"Embedding device: cpu ({EMBEDDING_CPU_COMPUTE_TYPE})")
+                    vectors = get_embeddings(tokenizer, encoder, texts)
+                else:
+                    raise
 
             now_str = utc_now_dt2()
             for (course_id, source_text), vec in zip(meta, vectors):

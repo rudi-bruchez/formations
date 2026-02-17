@@ -1,13 +1,15 @@
 USE PachadataTraining;
 GO
 
+-- DROP TABLE Course.CourseEmbeddings
+
 CREATE TABLE Course.CourseEmbeddings
 (
     CourseEmbeddingId bigint IDENTITY(1,1) NOT NULL
         CONSTRAINT PK_CourseEmbeddings PRIMARY KEY,
     CourseId              int NOT NULL,
     EmbeddingType         varchar(50) NOT NULL,
-    Embedding             vector(1536) NOT NULL,
+    Embedding             vector(1024) NOT NULL,
     -- e.g. 'text-embedding-3-large'
     ModelName             nvarchar(100) NOT NULL,
     -- Semantic version or internal versioning

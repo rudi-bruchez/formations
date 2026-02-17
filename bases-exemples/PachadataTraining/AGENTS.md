@@ -22,6 +22,28 @@ Use SQL Server tools (`sqlcmd`) to apply scripts locally.
 
 For `2025.json-restaurants.sql`, ensure `restaurants.json` exists at `/var/opt/mssql/backups/restaurants.json` in the SQL Server host/container.
 
+For the embeddings population script (`Structure/130.populate-embeddings.py`), run with `uv`:
+
+- `uv sync`
+- `uv run .\Structure\130.populate-embeddings.py`
+
+Embeddings environment variables (see `.env.example`):
+
+- `EMBEDDING_DEVICE`: `auto` (default), `cuda`, or `cpu`.
+- `EMBEDDING_COMPUTE_TYPE`: compute type for CUDA (default: `int8_float16`).
+- `EMBEDDING_CPU_COMPUTE_TYPE`: compute type for CPU fallback (default: `int8`).
+- `HF_TOKEN`: optional Hugging Face token for higher rate limits.
+- `HF_HUB_DISABLE_SYMLINKS_WARNING`: set to `1` to silence Windows symlink cache warnings.
+
+On Windows machines without CUDA runtime (`cublas64_12.dll`), keep `EMBEDDING_DEVICE=auto` (automatic CPU fallback) or set `EMBEDDING_DEVICE=cpu` directly.
+
+Troubleshooting (`Structure/130.populate-embeddings.py`):
+
+- `RuntimeError: Unable to open file 'model.bin'`: set `EMBEDDING_MODEL` to a valid CTranslate2 model repo/directory that contains `model.bin`.
+- `Library cublas64_12.dll is not found`: set `EMBEDDING_DEVICE=cpu` (or keep `auto` for CPU fallback).
+- HF warning about unauthenticated requests: set `HF_TOKEN` to improve rate limits and download reliability.
+- SQL connection/env errors: verify `SQLSERVER_SERVER`, `SQLSERVER_DATABASE`, `SQLSERVER_USERNAME`, and `SQLSERVER_PASSWORD` in `.env`.
+
 ## Coding Style & Naming Conventions
 - Use T-SQL with uppercase keywords (`CREATE TABLE`, `SELECT`, `GO`).
 - Indent with 4 spaces in DDL blocks and align column definitions for readability.
