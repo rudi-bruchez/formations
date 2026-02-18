@@ -117,9 +117,8 @@ CREATE TABLE Course.Course
 	PublishedDate date NOT NULL,
 	RetiredDate date NULL,
 	DurationDays tinyint NOT NULL
-    CONSTRAINT [pk_Course] PRIMARY KEY CLUSTERED (CourseId)
-    WITH (DATA_COMPRESSION = ROW)
-)
+    CONSTRAINT [pk_Course] PRIMARY KEY CLUSTERED (CourseId),
+    CONSTRAINT chk_Course_DifficultyLevel CHECK (DifficultyLevel BETWEEN 1 AND 5)
+) WITH (DATA_COMPRESSION = ROW)
 GO
-
 

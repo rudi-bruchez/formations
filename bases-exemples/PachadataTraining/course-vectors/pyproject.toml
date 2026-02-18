@@ -1,0 +1,20 @@
+[project]
+name = "course-vectors-search"
+version = "0.1.0"
+description = "Dependencies for 01.04.search.py"
+requires-python = ">=3.10"
+dependencies = [
+    "ctranslate2",
+    "numpy",
+    "pyodbc",
+    "python-dotenv",
+    "huggingface-hub",
+    "transformers",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.uv]
+package = false
