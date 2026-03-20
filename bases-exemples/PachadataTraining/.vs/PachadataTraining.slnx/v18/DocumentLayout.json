@@ -1,7 +1,16 @@
 {
   "Version": 1,
   "WorkspaceRootPath": "C:\\Users\\rudi\\source\\Repos\\formations\\bases-exemples\\PachadataTraining\\",
-  "Documents": [],
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\rudi\\source\\Repos\\formations\\bases-exemples\\PachadataTraining\\course-vectors\\02.01.02.benchmarks.sql||{B5A506EB-11BE-4782-9A18-21265C2CA0B4}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:course-vectors\\02.01.02.benchmarks.sql||{B5A506EB-11BE-4782-9A18-21265C2CA0B4}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\rudi\\source\\Repos\\formations\\bases-exemples\\PachadataTraining\\course-vectors\\02.01.01.database.sql||{B5A506EB-11BE-4782-9A18-21265C2CA0B4}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:course-vectors\\02.01.01.database.sql||{B5A506EB-11BE-4782-9A18-21265C2CA0B4}"
+    }
+  ],
   "DocumentGroupContainers": [
     {
       "Orientation": 0,
@@ -9,7 +18,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": -1,
+          "SelectedChildIndex": 6,
           "Children": [
             {
               "$type": "Bookmark",
@@ -22,6 +31,42 @@
             {
               "$type": "Bookmark",
               "Name": "ST:1:0:{956e1b22-878b-499b-ac5c-2705c05370ff}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:2:0:{956e1b22-878b-499b-ac5c-2705c05370ff}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:3:0:{956e1b22-878b-499b-ac5c-2705c05370ff}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:4:0:{956e1b22-878b-499b-ac5c-2705c05370ff}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "02.01.02.benchmarks.sql - not connected",
+              "DocumentMoniker": "C:\\Users\\rudi\\source\\Repos\\formations\\bases-exemples\\PachadataTraining\\course-vectors\\02.01.02.benchmarks.sql",
+              "RelativeDocumentMoniker": "course-vectors\\02.01.02.benchmarks.sql",
+              "ToolTip": "C:\\Users\\rudi\\source\\Repos\\formations\\bases-exemples\\PachadataTraining\\course-vectors\\02.01.02.benchmarks.sql - not connected",
+              "RelativeToolTip": "course-vectors\\02.01.02.benchmarks.sql - not connected",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000826|",
+              "WhenOpened": "2026-03-11T09:05:04.807Z",
+              "EditorCaption": " - not connected"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "02.01.01.database.sql - not connected",
+              "DocumentMoniker": "C:\\Users\\rudi\\source\\Repos\\formations\\bases-exemples\\PachadataTraining\\course-vectors\\02.01.01.database.sql",
+              "RelativeDocumentMoniker": "course-vectors\\02.01.01.database.sql",
+              "ToolTip": "C:\\Users\\rudi\\source\\Repos\\formations\\bases-exemples\\PachadataTraining\\course-vectors\\02.01.01.database.sql - not connected",
+              "RelativeToolTip": "course-vectors\\02.01.01.database.sql - not connected",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000826|",
+              "WhenOpened": "2026-03-11T09:04:40.003Z",
+              "EditorCaption": " - not connected"
             }
           ]
         },

@@ -14,6 +14,9 @@ CREATE TABLE Course.Category (
 )
 GO
 
+SELECT TOP 10 * FROM Course.Category;
+GO
+
 -------------------------------------------------------------
 --                 Course.Course
 -------------------------------------------------------------
@@ -32,9 +35,13 @@ CREATE TABLE Course.Course (
 ) WITH (DATA_COMPRESSION = ROW);
 GO
 
+SELECT TOP 10 * FROM Course.Course;
+GO
+
 -------------------------------------------------------------
 --                 Course.CourseEmbeddings
 -------------------------------------------------------------
+-- A dedicated embedding table
 CREATE TABLE Course.CourseEmbeddings (
 	CourseEmbeddingId bigint IDENTITY(1,1) NOT NULL,
 	CourseId int NOT NULL,
@@ -50,6 +57,11 @@ CREATE TABLE Course.CourseEmbeddings (
         REFERENCES Course.Course (CourseId)
 		ON DELETE CASCADE
 ) WITH (DATA_COMPRESSION = ROW);
+GO
+
+SELECT * 
+FROM Course.CourseEmbeddings
+WHERE CourseId = 1 ;
 GO
 
 -------------------------------------------------------------
@@ -89,11 +101,15 @@ CREATE TABLE dbo.BadSchemaStringKey (
 
 -- because ...
 ALTER DATABASE SCOPED CONFIGURATION SET PREVIEW_FEATURES = ON;
+GO
 
 CREATE VECTOR INDEX no_need_to_name_it
 ON dbo.BadSchemaStringKey (Embedding)
 WITH (METRIC = 'cosine', TYPE = 'DiskANN');
+GO
 
 ALTER DATABASE SCOPED CONFIGURATION SET PREVIEW_FEATURES = OFF;
 
 -- DROP TABLE dbo.BadSchemaStringKey;
+
+

@@ -1,0 +1,21 @@
+{
+  "data-source": {
+    "database-type": "mssql",
+    "connection-string": "@env('MSSQL_CONNECTION_STRING')",
+    "options": {
+      "set-session-context": false
+  },
+  "authentication": {
+    "provider": "SimulatorAuthentication",
+    "audience": "dab-simulator",
+    "issuer": "dab-simulator"
+  },
+  "runtime": {
+    "mcp": {
+      "enabled": true,
+      "path": "/mcp"
+    }
+  },
+  "entities": {}
+}
+

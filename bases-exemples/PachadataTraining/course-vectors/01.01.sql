@@ -10,10 +10,18 @@ DECLARE @query_vector VECTOR(1024) = (
 	WHERE CourseEmbeddingId = 1662
 )
 
-SELECT TOP 10
-    ce.CourseId,
-    c.Title,
-    VECTOR_DISTANCE('cosine', @query_vector, ce.Embedding) AS distance
-FROM Course.CourseEmbeddings ce
+;WITH cte AS (
+	SELECT 
+		ce.CourseId,
+		VECTOR_DISTANCE('cosine', @query_vector, ce.Embedding) AS distance
+	FROM Course.CourseEmbeddings ce
+)
+SELECT 
+	c.Title,
+	c.Description,
+	ce.*
+FROM cte ce
 JOIN Course.Course c ON ce.CourseId = c.CourseId
-ORDER BY distance;
+WHERE distance < 0.05
+ORDER BY distance
+OPTION (MAXDOP 1);
