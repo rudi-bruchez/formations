@@ -1,0 +1,1 @@
+Vector scripts (`Vectors/`) and the vector course (`course-vectors/`) of the earlier PachadataTraining project, moved here unchanged from the folder above; `course-vectors/01.04.search.py` reads its `.env` from this folder, and the model of that file is `archive/.env.example`.

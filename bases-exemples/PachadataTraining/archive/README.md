@@ -1,0 +1,1 @@
+Files of the earlier PachadataTraining project (SQL structure, Data API builder configuration, .NET project, embedding scripts), moved here unchanged from the folder above; `vectors/` has the vector scripts and the course.
