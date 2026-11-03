@@ -254,6 +254,8 @@ Le commentaire en tête de chaque fichier dit ce que la requête fait et, le cas
 - Fond de démonstration : un tir en lecture seule sur `PachaDataFormation` pendant un cours, pour que l'instance ne soit pas au repos.
 - Comparaison de versions : la même graine sur `sql2022` (`-serveur localhost:11433`) et `sql2025` (`-serveur localhost:11533`), pour rejouer la même suite de requêtes et de paramètres sur les deux.
 
+Douze exercices guidés dans les rapports du Query Store, avec leur corrigé mesuré : `sql-server/exercices/performances/query-store-rapports-workload.md`.
+
 ## Écrire une requête
 
 Un fichier dans `requetes/`, nommé `<appli>-NN-<objet>.sql`. L'en-tête est fait de commentaires `-- clé: valeur` ; les autres lignes, commentaires compris, forment le corps envoyé au serveur.
