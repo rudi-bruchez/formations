@@ -1,0 +1,67 @@
+name: pachaworkload release
+
+on:
+  push:
+    tags: ['pachaworkload-v*']
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: sql-server/pachaworkload
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: sql-server/pachaworkload/go.mod
+
+      - name: Version
+        run: |
+          set -eu
+          version=${GITHUB_REF_NAME#pachaworkload-v}
+          echo "$version" | grep -Eq '^[0-9]+\.[0-9]+\.[0-9]+$' || { echo "tag invalide : $GITHUB_REF_NAME"; exit 1; }
+          echo "version=$version" >> "$GITHUB_ENV"
+
+      - name: Notes
+        run: |
+          set -eu
+          RELEASE_TAG_PREFIX=pachaworkload-v ../../scripts/release-notes.sh "$version" "$GITHUB_REPOSITORY" \
+            "pachaworkload_${version}_checksums.txt" CHANGELOG.md > "$RUNNER_TEMP/notes.md"
+          cat "$RUNNER_TEMP/notes.md"
+
+      - name: Test
+        run: go vet ./... && go test ./...
+
+      - name: Build
+        run: |
+          set -eu
+          out="$RUNNER_TEMP/pachaworkload"
+          mkdir -p "$out"
+          GOOS=windows GOARCH=amd64 CGO_ENABLED=0 go build -trimpath \
+            -ldflags "-s -w -X main.version=$version" -o "$out/pachaworkload.exe" .
+          cp -r requetes observation README.md CHANGELOG.md LISEZMOI-WINDOWS.txt cibles.exemple.txt .env.example "$out/"
+          cd "$RUNNER_TEMP"
+          zip -qr "pachaworkload_${version}_windows_amd64.zip" pachaworkload
+          sha256sum "pachaworkload_${version}_windows_amd64.zip" > "pachaworkload_${version}_checksums.txt"
+          cat "pachaworkload_${version}_checksums.txt"
+
+      - name: Publish
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -eu
+          tag="$GITHUB_REF_NAME"
+          cd "$RUNNER_TEMP"
+          files="pachaworkload_${version}_windows_amd64.zip pachaworkload_${version}_checksums.txt"
+          if gh release view "$tag" -R "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
+            gh release upload "$tag" $files --clobber -R "$GITHUB_REPOSITORY"
+            gh release edit "$tag" --notes-file notes.md -R "$GITHUB_REPOSITORY"
+          else
+            gh release create "$tag" $files --title "pachaworkload $version" \
+              --notes-file notes.md -R "$GITHUB_REPOSITORY"
+          fi

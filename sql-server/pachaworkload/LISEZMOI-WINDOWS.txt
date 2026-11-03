@@ -1,0 +1,42 @@
+pachaworkload pour Windows
+==========================
+
+.\pachaworkload.exe -version donne la version de cette archive.
+
+Rejoue sur PachaDataFormation le trafic d'une application de gestion de formation,
+sur un serveur SQL ou sur tous les postes d'une salle. Le mode d'emploi complet est
+README.md ; ce fichier donne le minimum pour une salle sous Windows.
+
+1. Installer
+   Décompresser l'archive, par exemple dans C:\pachaworkload.
+   Windows marque les fichiers téléchargés ; si l'exécutable est bloqué :
+       Unblock-File C:\pachaworkload\pachaworkload.exe
+   Le programme n'est pas signé : SmartScreen ou l'antivirus peuvent demander une confirmation.
+
+2. Se placer dans le dossier (les requêtes sont lues dans requetes\ à partir du dossier courant)
+       cd C:\pachaworkload
+
+3. Donner le mot de passe SQL (même identifiant sur tous les serveurs, sa par défaut)
+       $env:SQLCMDPASSWORD = 'le mot de passe'
+       $env:WORKLOAD_USER  = 'sa'        # facultatif
+   ou bien copier .env.example en .env et le remplir (lu par défaut dans le dossier courant).
+   Ou, sans mot de passe, avec le compte Windows de la session : ajouter -windows aux
+   commandes (ce compte doit avoir un login sur chaque instance).
+
+4. Décrire la salle : copier cibles.exemple.txt en salle.txt, une ligne par poste,
+   hôte:port [base]. Sans -windows, les instances doivent accepter l'authentification SQL Server ;
+   dans tous les cas, les connexions TCP sur ce port (pare-feu compris). Instance nommée : port fixe.
+
+5. Vérifier, puis lancer
+       .\pachaworkload.exe -cibles salle.txt -base PachaDataFormation -verifier
+       .\pachaworkload.exe -cibles salle.txt -base PachaDataFormation -threads 6 -postes 8 -duree 20m
+
+   Avec les écritures (inscriptions, paiements...), sur des bases qui sont des copies :
+       .\pachaworkload.exe -cibles salle.txt -base PachaDataFormation -ecritures -forcer-ecritures -threads 6 -postes 8 -duree 20m
+   Restaurer ensuite les bases des participants avant l'exercice suivant.
+
+   Un seul serveur : -serveur machine:1433 au lieu de -cibles.
+   Ctrl-C arrête le tir et affiche le bilan. Liste de toutes les options : .\pachaworkload.exe -h
+
+6. Observer : observation\observer.sql et la session Extended Events
+   observation\xe-rapports-creer.sql, à ouvrir dans SSMS (changer le USE si la base a un autre nom).

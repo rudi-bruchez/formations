@@ -1,0 +1,6 @@
+# Serveurs visés par pachaworkload -cibles, un par ligne : hôte:port [base]
+# Sans base, celle de -base. Les lignes vides et celles qui commencent par # sont ignorées.
+pc-salle-01:1433
+pc-salle-02:1433
+pc-salle-03:1433 PachaCopie
+192.168.10.24:1433

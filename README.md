@@ -9,4 +9,4 @@ Sources et fichiers pour formations
 
 ## Charge applicative PachaDataFormation
 
-[pachaworkload pour Windows](https://files.pachadata.com/public/share/UoTVNsOJRXPISjhorSp45A) : un exécutable qui rejoue l'activité d'une application de gestion de formation (49 requêtes, rapides ou lentes, saines ou problématiques) sur un ou plusieurs serveurs SQL Server, pour observer le cache de plans, le Query Store, les sessions d'événements étendus et le choix des index. Le mode d'emploi est dans `LISEZMOI-WINDOWS.txt` et `README.md`, à l'intérieur de l'archive.
+[pachaworkload pour Windows](https://github.com/rudi-bruchez/formations/releases?q=pachaworkload) (sources dans `sql-server/pachaworkload`) : un exécutable qui rejoue l'activité d'une application de gestion de formation (49 requêtes, rapides ou lentes, saines ou problématiques) sur un ou plusieurs serveurs SQL Server, pour observer le cache de plans, le Query Store, les sessions d'événements étendus et le choix des index. Le mode d'emploi est dans `LISEZMOI-WINDOWS.txt` et `README.md`, à l'intérieur de l'archive de chaque release.
